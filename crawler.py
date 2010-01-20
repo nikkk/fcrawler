@@ -10,7 +10,7 @@ import accounts
 RENSHU_REGEX = re.compile(r"^<font size=[0-9]+>([^<].+)$")
 # 試合情報の解析に利用
 SHIAI_BEGIN_REGEX = re.compile(r"^<font size=[0-9]+ color='#333333'>")
-SHIAI_END_REGEX = re.compile(r"^<br>")
+SHIAI_END_REGEX = re.compile(r"^<hr>")
 
 def toSafeString(s):
     return analyzer.toUTF8(unicode(s.strip(), "shift_jis"))
