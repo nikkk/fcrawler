@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
+# TODO メッセージを出す
+
 import gdata.calendar.service as service
 from crawler import *
 from calendar import *
