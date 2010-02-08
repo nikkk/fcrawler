@@ -151,7 +151,7 @@ class Analyzer(object):
 
     def courtToCourts(self, court):
         tokens = court.split(",")
-        courts = [t for t in tokens if t.isdigit()]
+        courts = [t for t in tokens if not "-" in t]
         return ", ".join(courts)
 
     ######
