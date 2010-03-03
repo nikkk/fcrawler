@@ -2,7 +2,6 @@
 
 import re
 import urllib
-import schedule
 import analyzer
 import accounts
 
