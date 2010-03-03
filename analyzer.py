@@ -99,7 +99,7 @@ class Analyzer(object):
     def spotNameOnMap(self, basho):
         if "博多の森" in basho:
             return "東平尾公園"
-        return basho
+        return basho.strip()
 
     def bashoToAt(self, basho):
         at = None
@@ -112,7 +112,12 @@ class Analyzer(object):
             at = toUTF8("".join(at))
         else:
             at = basho
-        return self.spotNameOnMap(at)
+        return self.spotNameOnMap(at).strip()
+
+    def skipUntilOpenParen(self, i, s, length):
+        while i < length and not s[i] != "(":
+            i += 1
+        return i
 
     def skipNotDigits(self, i, s, length):
         if not length:
@@ -136,6 +141,8 @@ class Analyzer(object):
         # timeFrom と timeTo の解析
         i = 6 # date の続きからってことで
         length = len(nitiji) # length はあらかじめ計算しておく
+        ## timeFrom (yyMMdd.*(E)(mm時.*) -> (E)(mm時.*))
+        i = self.skipUntilOpenParen(i, nitiji, length)
         ## timeFrom (yyMMdd(E)(mm時.*) -> mm:00)
         ### timeFrom までの文字を飛ばす
         i = self.skipNotDigits(i, nitiji, length)
@@ -152,7 +159,7 @@ class Analyzer(object):
     def courtToCourts(self, court):
         tokens = court.split(",")
         courts = [t for t in tokens if not "-" in t]
-        return ", ".join(courts)
+        return ", ".join([s.strip() for s in courts])
 
     ######
     # 試合情報の解析
@@ -200,13 +207,16 @@ class Analyzer(object):
     def taikaimeiToCategory(self, taikaimei):
         matched = [c for p, c in TAIKAIME_PATTERNS.items() if p in taikaimei]
         if not matched:
-            return taikaimei
+            return taikaimei.strip()
         else:
             category = "".join(matched)
-            return "%s試合" % (category)
+            return "%s試合" % (category.strip())
 
     def shiaibiToDate(self, shiaibi):
-        return shiaibi.replace("/", "-")
+        return shiaibi.replace("/", "-").strip()
 
     def uketukeToTimeFrom(self, uketuke):
-        return uketuke
+        if uketuke == "--:--":
+            return "08:45"
+        else:
+            return uketuke.strip()
