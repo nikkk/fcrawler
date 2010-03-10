@@ -24,19 +24,22 @@ MIX_DOUBLES = "混D"
 TEAM = "団体"
 
 TAIKAIME_PATTERNS = {
-    "男子シングルス" : MALE_SINGLES,
-    "男子ダブルス" : MALE_DOUBLES,
-    "男子S" : MALE_SINGLES,
-    "男子D" : MALE_DOUBLES,
-    "男ダブ" : MALE_DOUBLES,
-    "女子シングルス" : FEMALE_SINGLES,
-    "女子ダブルス" : FEMALE_DOUBLES,
-    "女子S" : FEMALE_SINGLES,
-    "女子D" : FEMALE_DOUBLES,
-    "女ダブ" : FEMALE_DOUBLES,
-    "ミックスダブルス" : MIX_DOUBLES,
-    "混合D" : MIX_DOUBLES,
-    "団体" : TEAM,
+    "男子シングルス" : (MALE_SINGLES, []),
+    "男子シングル" : (MALE_SINGLES, []),
+    "男子ダブルス" : (MALE_DOUBLES, []),
+    "男子S" : (MALE_SINGLES, []),
+    "男子D" : (MALE_DOUBLES, []),
+    "男ダブ" : (MALE_DOUBLES, []),
+    "女子シングルス" : (FEMALE_SINGLES, []),
+    "女子シングル" : (FEMALE_SINGLES, []),
+    "女子ダブルス" : (FEMALE_DOUBLES, []),
+    "女子S" : (FEMALE_SINGLES, []),
+    "女子D" : (FEMALE_DOUBLES, []),
+    "女ダブ" : (FEMALE_DOUBLES, []),
+    "ミックスダブルス" : (MIX_DOUBLES, []),
+    "混合D" : (MIX_DOUBLES, []),
+    "団体" : (TEAM, []),
+    "男子・女子ダブルス" : (MALE_DOUBLES + FEMALE_DOUBLES, [FEMALE_DOUBLES]),
     }
 
 class Analyzer(object):
@@ -204,12 +207,34 @@ class Analyzer(object):
             category, date, timeFrom, timeTo, at, description)
         self.shiaiSchedules.append(s)
 
+    def unique(self, items):
+      result = []
+      for item in items:
+          if not item in result:
+              result.append(item)
+      return result
+
+    def findCategoryByName(self, name, categories):
+        for cat in categories:
+            if cat[0] == name:
+                return cat
+        return None
+
+    def cleanCategories(self, matched):
+        categories = self.unique(matched)
+        conflicts = []
+        for cat in categories:
+            cs = cat[1]
+            conflicts.extend(cs)
+        return [cat[0] for cat in categories if not cat[0] in conflicts]
+
     def taikaimeiToCategory(self, taikaimei):
         matched = [c for p, c in TAIKAIME_PATTERNS.items() if p in taikaimei]
         if not matched:
             return taikaimei.strip()
         else:
-            category = "".join(matched)
+            categories = self.cleanCategories(matched)
+            category = "".join(categories)
             return "%s試合" % (category.strip())
 
     def shiaibiToDate(self, shiaibi):
