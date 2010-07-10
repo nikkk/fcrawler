@@ -238,7 +238,16 @@ class Analyzer(object):
             return "%s試合" % (category.strip())
 
     def shiaibiToDate(self, shiaibi):
-        return shiaibi.replace("/", "-").strip()
+        if shiaibi.count("/") == 2:
+            return shiaibi.replace("/", "-").strip()
+        elif len(shiaibi) == 8:
+            y = shiaibi[0:4]
+            m = shiaibi[4:6]
+            d = shiaibi[6:8]
+            return y + "-" + m + "-" + d
+        else:
+            msg = "よく分からない形式の日付 (試合日): %s" % (shiaibi)
+            raise ValueError(msg)
 
     def uketukeToTimeFrom(self, uketuke):
         if uketuke == "--:--":
