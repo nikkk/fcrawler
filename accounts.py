@@ -47,3 +47,9 @@ class Accounts(object):
         if not self.fightclubPasswordCache:
             self.fightclubPasswordCache = self.readValue("fightclubPassword")
         return self.fightclubPasswordCache
+
+    fightclubNameCache = None
+    def fightclubName(self):
+        if not self.fightclubNameCache:
+            self.fightclubNameCache = self.readValue("fightclubName")
+        return self.fightclubNameCache

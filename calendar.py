@@ -9,18 +9,16 @@ class Calendar(object):
     def __init__(self, client):
         self.client = client
 
-    def alreadyRegistered(self, event):
-        query = service.CalendarEventQuery(ID, 'private', 'full')
-        query.start_min = event.when[0].start_time
-        query.start_max = event.when[0].end_time
-        feed = self.client.CalendarQuery(query)
-        newTitle = event.title.text
-        for e in feed.entry:
-            title = e.title.text
-            if title == newTitle:
-                return True
-        return False
+    def register(self, events, date, tag):
+        self.cleanTaggedEvents(date, tag)
+        for e in events:
+            self.client.InsertEvent(e, URL)
 
-    def register(self, event):
-        if not self.alreadyRegistered(event):
-            self.client.InsertEvent(event, URL)
+    def cleanTaggedEvents(self, date, tag):
+        query = service.CalendarEventQuery(ID, 'private', 'full')
+        query.start_min = date + "T00:00:00.000+09:00"
+        query.start_max = date + "T23:59:59.000+09:00"
+        feed = self.client.CalendarQuery(query)
+        removee = [e for e in feed.entry if e.content.text and tag in e.content.text]
+        for e in removee:
+            self.client.DeleteEvent(e.GetEditLink().href)

@@ -4,7 +4,7 @@
 # TODO メッセージを出す
 
 import gdata.calendar.service as service
-from crawler import *
+from schedulelist import *
 from calendar import *
 from accounts import *
 
@@ -15,15 +15,24 @@ def makeClient(acc):
     client.ProgrammaticLogin()
     return client
 
+def registerSchedules(calendar, schedules):
+    events = {}
+    for schedule in schedules:
+        k = (schedule.date, schedule.tag())
+        es = events.get(k, [])
+        es.append(schedule.toEvent())
+        events[k] = es
+
+    for (date, tag), es in events.iteritems():
+        calendar.register(es, date, tag)
+
 def main(args):
     accounts = Accounts()
-    crawler = Crawler(accounts)
     client = makeClient(accounts)
     calendar = Calendar(client)
 
-    for schedule in crawler:
-        event = schedule.toEvent()
-        calendar.register(event)
+    registerSchedules(calendar, RenshuList(accounts))
+    registerSchedules(calendar, ShiaiList(accounts))
 
 if __name__ == '__main__':
     import sys
