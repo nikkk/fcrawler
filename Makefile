@@ -1,5 +1,6 @@
 BIN_DIR = $(HOME)/bin
 SCRIPTS_DIR = $(BIN_DIR)/fcrawler-scripts
+SCRIPT = $(BIN_DIR)/fcrawler
 
 .PHONY: install, uninstall, clean-install
 
@@ -7,7 +8,7 @@ install:
 	-mkdir -vp $(BIN_DIR)
 	-mkdir -vp $(SCRIPTS_DIR)
 	-cp -v *.py $(SCRIPTS_DIR)
-	-ln -vs $(SCRIPTS_DIR)/main.py $(BIN_DIR)/fcrawler
+	-[ -x $(SCRIPT) ] || ln -vs $(SCRIPTS_DIR)/main.py $(SCRIPT)
 
 uninstall:
 	-rm -fv $(SCRIPTS_DIR)/*.py

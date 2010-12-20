@@ -5,7 +5,7 @@ import re
 from fcsite import *
 
 
-ENTRIED_MEMBERS_LIST_BEGIN = re.compile(r"^1 \.[ <].*")
+ENTRIED_MEMBERS_LIST_BEGIN = re.compile(r"^(<b>)?1 \.[ <].*")
 ENTRIED_MEMBERS_LIST_END = re.compile(r"^<input type=hidden")
 ENTRIED_MEMBER = re.compile(r"^[1-9]")
 
@@ -35,7 +35,7 @@ class State(object):
             if ENTRIED_MEMBERS_LIST_BEGIN.match(line):
                 inBody = True
                 bodyLines.append(line)
-            elif ENTRIED_MEMBERS_LIST_END.match(line):
+            elif inBody and ENTRIED_MEMBERS_LIST_END.match(line):
                 inBody = False
                 return self.analyze(bodyLines)
             elif inBody:
@@ -67,7 +67,10 @@ class State(object):
 
     def asEventContent(self):
         content = "状況：\n"
-        mems = "\n".join([" " + self.format(m) for m in self.members])
+        if self.members:
+            mems = "\n".join([" " + self.format(m) for m in self.members])
+        else:
+            mems = ""
         return content + mems
 
     def format(self, line):
