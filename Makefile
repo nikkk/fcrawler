@@ -12,6 +12,7 @@ install:
 
 uninstall:
 	-rm -fv $(SCRIPTS_DIR)/*.py
+	-rm -fv $(SCRIPTS_DIR)/*.pyc
 	-rm -fv $(BIN_DIR)/fcrawler
 
-clean-install: uninstall, install
+clean-install: uninstall install
