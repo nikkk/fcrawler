@@ -8,6 +8,7 @@ from fcsite import *
 ENTRIED_MEMBERS_LIST_BEGIN = re.compile(r"^(<b>)?1 \.[ <].*")
 ENTRIED_MEMBERS_LIST_END = re.compile(r"^<input type=hidden")
 ENTRIED_MEMBER = re.compile(r"^[1-9]")
+BALL_MARK = re.compile(r"(.*)<font color=red>(v+)</font>.*")
 
 class State(object):
     def __init__(self, acc, url):
@@ -51,7 +52,14 @@ class State(object):
         return self.parseMembers("".join(cleaned))
 
     def convertBallMark(self, line):
-        return line.replace("<font color=red>v</font>", "[v]")
+         marks = BALL_MARK.sub(r"\2", line)
+         ballCartCount = len(marks)
+         if ballCartCount == 0:
+             return line
+         elif ballCartCount == 1:
+             return BALL_MARK.sub(r"\1[v]", line)
+         else:
+             return BALL_MARK.sub(r"\1[v" + str(ballCartCount) + "]", line)
 
     def eraseDecorationTags(self, line):
         l = line
