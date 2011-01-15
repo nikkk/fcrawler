@@ -49,7 +49,7 @@ KEY_REGEX = re.compile(r"^<input type='hidden' name='key' value='([0-9]+)'>")
 
 # 練習情報の解析に利用
 RENSHU_REGEX = re.compile(r"^<font size=[0-9]+>([^<].+)$")
-RENSHU_STATE_URL = "http://cgi.members.interq.or.jp/cool/masashi/fc/touroku.cgi"
+RENSHU_STATE_URL = SITE_URL + "/touroku.cgi"
 RENSHU_BASHO_REGEX = re.compile("^場所：(.*)$")
 NITIJI_REGEX = re.compile("^日時：(.*)$")
 COURT_REGEX = re.compile("^コート：(.*)$")
@@ -57,7 +57,7 @@ COURT_REGEX = re.compile("^コート：(.*)$")
 # 試合情報の解析に利用
 SHIAI_BEGIN_REGEX = re.compile(r"^<font size=[0-9]+ color='#333333'>")
 SHIAI_END_REGEX = re.compile(r"^<hr>")
-SHIAI_STATE_URL = "http://cgi.members.interq.or.jp/cool/masashi/fc/shiai_touroku.cgi"
+SHIAI_STATE_URL = SITE_URL + "/shiai_touroku.cgi"
 TAIKAIMEI_REGEX = re.compile(r"^大会名：([^<]*)<br>$")
 SHIAIBI_REGEX = re.compile(r"^試合日：([^<]*)<br>$")
 UKETUKE_REGEX = re.compile(r"^受付開始：([^<]*)<br>$")

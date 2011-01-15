@@ -53,10 +53,10 @@ def fcURL(acc, baseURL):
     return baseURL % (fcPass)
 
 def renshuURL(acc):
-    return fcURL(acc, "http://cgi.members.interq.or.jp/cool/masashi/fc/000.cgi?fs=2&id=%s&ej=0")
+    return fcURL(acc, SITE_URL + "/000.cgi?fs=2&id=%s&ej=0")
 
 def shiaiURL(acc):
-    return fcURL(acc, "http://cgi.members.interq.or.jp/cool/masashi/fc/002.cgi?fs=2&id=%s&ej=0")
+    return fcURL(acc, SITE_URL + "/002.cgi?fs=2&id=%s&ej=0")
 
 
 # 練習情報の解析に利用

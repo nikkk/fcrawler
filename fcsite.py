@@ -1,5 +1,7 @@
 #-*- coding:utf-8 -*-
 
+SITE_URL = "http://thefightclub.jp/fc"
+
 def toUTF8(s):
     return s.encode("utf-8", "replace")
 
