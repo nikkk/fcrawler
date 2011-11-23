@@ -149,7 +149,18 @@ def nitijiToDateTimes(nitiji):
     i, timeTo = collectDigits(i, nitiji, length)
     timeTo.append(":00")
 
-    return (date, "".join(timeFrom), "".join(timeTo))
+    return (date, normalizeTime(timeFrom), normalizeTime(timeTo))
+
+def normalizeTime(time):
+    # time は 3 件入っている状態でなければならない。
+    #   [時間2桁目, 時間1桁目, 時刻]
+    # たとえば 23:00 なら
+    #   ["2", "3", ":00"]
+    # となる。
+    # このとき、時間2桁目が存在しない場合には 0 で補完する。
+    if len(time) == 2:
+        time = ["0"] + time
+    return "".join(time)
 
 def courtToCourts(court):
     tokens = court.split(",")
@@ -202,7 +213,11 @@ def uketukeToTimeFrom(uketuke):
     if uketuke == "--:--":
         return "08:45"
     else:
-        return uketuke.strip()
+        d, t = uketuke.strip().split(":")
+        try:
+            return "%02d:%02d" % (int(d), int(t))
+        except:
+            return "08:45"
 
 
 class Renshu(Schedule):
